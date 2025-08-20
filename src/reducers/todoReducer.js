@@ -1,8 +1,8 @@
-const initialState = {
-    todos : []
+export const initialState = {
+    todos : [],
 }
 
-function reducer(state, action){
+export function reducer(state, action){
     switch (action.type) {
         case 'ADD_TODO':
             const {name, description} = action.payload;
