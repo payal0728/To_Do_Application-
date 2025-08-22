@@ -1,0 +1,55 @@
+.todo-container {
+  padding: 20px;
+}
+
+.todo-header {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.todo-header input,
+.todo-header select {
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.todo-header input {
+  flex: 1;
+}
+
+.todo-header select {
+  width: 200px;
+}
+
+.todo-title {
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.todo-card {
+  margin-bottom: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+
+.todo-card:hover {
+  transform: translateY(-4px);
+}
+
+.todo-card .card-body {
+  padding: 15px;
+}
+
+.todo-status {
+  margin-left: 10px;
+  font-size: 18px;
+}
+
+.todo-btn {
+  margin-left: 10px;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 14px;
+}
