@@ -6,7 +6,7 @@ import Navbar from './Components/Navbar'
 import Home from './Pages/Home'
 import ToDoForm from './Components/ToDoForm'
 import About from './Pages/About'
-import { ToDoContext, ToDoProvider } from './context/ToDoContext'
+import { ToDoProvider } from './context/ToDoContext'
 
 function App() {
   const [count, setCount] = useState(0)
