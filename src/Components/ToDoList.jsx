@@ -6,6 +6,9 @@ const ToDoList = () => {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
   const [expandedTask, setExpandedTask] = useState(null);
+  const [editTask, setEditTask] = useState(null); // store task being edited
+  const [editName, setEditName] = useState("");
+  const [editDescription, setEditDescription] = useState("");
 
   // Search filter
   const filterBySearch = (todo, search) =>
@@ -25,6 +28,20 @@ const ToDoList = () => {
 
   const toggleExpand = (id) => {
     setExpandedTask(expandedTask === id ? null : id);
+  };
+
+  const handleEdit = (todo) => {
+    setEditTask(todo.id);
+    setEditName(todo.name);
+    setEditDescription(todo.description);
+  };
+
+  const handleSave = (id) => {
+    dispatch({
+      type: "EDIT_TODO",
+      payload: { id, name: editName, description: editDescription },
+    });
+    setEditTask(null);
   };
 
   return (
@@ -88,9 +105,7 @@ const ToDoList = () => {
               <div key={todo.id} className="col-sm-12 col-md-6 col-lg-4">
                 <div
                   className="card border-0 shadow-sm h-100 rounded-4"
-                  style={{
-                    transition: "transform 0.2s",
-                  }}
+                  style={{ transition: "transform 0.2s" }}
                   onMouseEnter={(e) =>
                     (e.currentTarget.style.transform = "translateY(-5px)")
                   }
@@ -99,23 +114,39 @@ const ToDoList = () => {
                   }
                 >
                   <div className="card-body">
-                    {/* Title */}
-                    <h5 className="card-title fw-bold text-dark">
-                      {todo.name}
-                    </h5>
-
-                    {/* Description */}
-                    <p className="card-text text-muted">
-                      {displayText}{" "}
-                      {shouldTruncate && (
-                        <button
-                          onClick={() => toggleExpand(todo.id)}
-                          className="btn btn-link btn-sm p-0 fw-semibold"
-                        >
-                          {isExpanded ? "Show Less" : "Show More"}
-                        </button>
-                      )}
-                    </p>
+                    {/* Title + Description */}
+                    {editTask === todo.id ? (
+                      <>
+                        <input
+                          type="text"
+                          value={editName}
+                          onChange={(e) => setEditName(e.target.value)}
+                          className="form-control mb-2"
+                        />
+                        <textarea
+                          value={editDescription}
+                          onChange={(e) => setEditDescription(e.target.value)}
+                          className="form-control mb-2"
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <h5 className="card-title fw-bold text-dark">
+                          {todo.name}
+                        </h5>
+                        <p className="card-text text-muted">
+                          {displayText}{" "}
+                          {shouldTruncate && (
+                            <button
+                              onClick={() => toggleExpand(todo.id)}
+                              className="btn btn-link btn-sm p-0 fw-semibold"
+                            >
+                              {isExpanded ? "Show Less" : "Show More"}
+                            </button>
+                          )}
+                        </p>
+                      </>
+                    )}
 
                     {/* Status Badge */}
                     <span
@@ -128,22 +159,47 @@ const ToDoList = () => {
 
                     {/* Action buttons */}
                     <div className="mt-3 d-flex gap-2">
-                      <button
-                        onClick={() =>
-                          dispatch({ type: "TOGGLE_TODO", payload: todo.id })
-                        }
-                        className="btn btn-sm btn-outline-primary rounded-pill"
-                      >
-                        🔄 Toggle
-                      </button>
-                      <button
-                        onClick={() =>
-                          dispatch({ type: "DELETE_TODO", payload: todo.id })
-                        }
-                        className="btn btn-sm btn-outline-danger rounded-pill"
-                      >
-                        🗑️ Delete
-                      </button>
+                      {editTask === todo.id ? (
+                        <>
+                          <button
+                            onClick={() => handleSave(todo.id)}
+                            className="btn btn-sm btn-success rounded-pill"
+                          >
+                            💾 Save
+                          </button>
+                          <button
+                            onClick={() => setEditTask(null)}
+                            className="btn btn-sm btn-secondary rounded-pill"
+                          >
+                            ❌ Cancel
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            onClick={() =>
+                              dispatch({ type: "TOGGLE_TODO", payload: todo.id })
+                            }
+                            className="btn btn-sm btn-outline-primary rounded-pill"
+                          >
+                            🔄 Toggle
+                          </button>
+                          <button
+                            onClick={() => handleEdit(todo)}
+                            className="btn btn-sm btn-outline-success rounded-pill"
+                          >
+                            ✏️ Edit
+                          </button>
+                          <button
+                            onClick={() =>
+                              dispatch({ type: "DELETE_TODO", payload: todo.id })
+                            }
+                            className="btn btn-sm btn-outline-danger rounded-pill"
+                          >
+                            🗑️ Delete
+                          </button>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
